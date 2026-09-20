@@ -90,7 +90,6 @@
 
         <!-- Dashboard Widgets -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <!-- Total Warga -->
             <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
                 <div>
                     <p class="text-xs font-bold text-slate-400 uppercase">Total Warga</p>
@@ -102,7 +101,6 @@
                 </div>
             </div>
 
-            <!-- Total KK -->
             <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
                 <div>
                     <p class="text-xs font-bold text-slate-400 uppercase">Total KK</p>
@@ -114,7 +112,6 @@
                 </div>
             </div>
 
-            <!-- Rata-rata Anggota -->
             <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
                 <div>
                     <p class="text-xs font-bold text-slate-400 uppercase">Rata-rata Anggota</p>
@@ -126,7 +123,6 @@
                 </div>
             </div>
 
-            <!-- Rasio Gender -->
             <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
                 <div>
                     <p class="text-xs font-bold text-slate-400 uppercase">Laki / Perempuan</p>
@@ -263,8 +259,8 @@
             loadData();
         });
 
-        // Load Data dari Google Sheets Backend
-        async function loadData() {
+        // 1. JSONP Script Injection (Bebas CORS)
+        function loadData() {
             const kelurahan = document.getElementById("selectKelurahan").value;
             const rt = document.getElementById("selectRT").value.trim().toUpperCase() || "RT_001";
             const kelurahanText = document.getElementById("selectKelurahan").options[document.getElementById("selectKelurahan").selectedIndex].text;
@@ -281,34 +277,39 @@
                 </tr>
             `;
 
-            try {
-                // redirect: 'follow' Wajib ditambahkan agar terhindar dari kendala CORS Google Apps Script
-                const response = await fetch(`${GAS_WEB_APP_URL}?kelurahan=${kelurahan}&rt=${rt}`, {
-                    method: 'GET',
-                    redirect: 'follow'
-                });
-                
-                const result = await response.json();
+            // Hapus script JSONP lama
+            const oldScript = document.getElementById("jsonp_script");
+            if (oldScript) oldScript.remove();
 
-                if (result.status === "success") {
-                    currentDataWarga = result.data || [];
-                    renderTable(currentDataWarga);
-                    updateStats(currentDataWarga);
-                } else {
-                    alert("Gagal memuat data: " + result.message);
-                }
-            } catch (err) {
-                console.error("CORS / Network Error:", err);
+            // Inject script tag baru
+            const script = document.createElement("script");
+            script.id = "jsonp_script";
+            script.src = `${GAS_WEB_APP_URL}?kelurahan=${kelurahan}&rt=${rt}&callback=handleJSONPResponse`;
+            
+            script.onerror = function() {
                 tbody.innerHTML = `
                     <tr>
                         <td colspan="8" class="text-center py-8 text-rose-500">
                             <i class="fa-solid fa-triangle-exclamation fa-2xl mb-2"></i>
-                            <p>Gagal terhubung ke Google Sheets. Pastikan izin Deployment di Apps Script sudah diatur ke 'Anyone'.</p>
+                            <p>Gagal terhubung. Pastikan 'Who Has Access' di Apps Script sudah diubah ke 'Anyone'.</p>
                         </td>
                     </tr>
                 `;
-            }
+            };
+
+            document.body.appendChild(script);
         }
+
+        // Global Callback Handler untuk JSONP
+        window.handleJSONPResponse = function(result) {
+            if (result.status === "success") {
+                currentDataWarga = result.data || [];
+                renderTable(currentDataWarga);
+                updateStats(currentDataWarga);
+            } else {
+                alert("Gagal memuat data: " + result.message);
+            }
+        };
 
         // Render Data ke Tabel
         function renderTable(data) {
@@ -363,7 +364,7 @@
             document.getElementById("statGenderRatio").innerText = `${totalLaki} / ${totalPerempuan}`;
         }
 
-        // Submit Form Tambah Warga
+        // 2. Submit Form
         async function submitForm(e) {
             e.preventDefault();
             const btn = document.getElementById("btnSubmit");
@@ -384,26 +385,18 @@
             };
 
             try {
-                // Mengirim payload sebagai text/plain dengan mode cors dan redirect follow
-                const response = await fetch(GAS_WEB_APP_URL, {
+                await fetch(GAS_WEB_APP_URL, {
                     method: 'POST',
-                    mode: 'cors',
-                    headers: {
-                        'Content-Type': 'text/plain;charset=utf-8',
-                    },
-                    body: JSON.stringify(payload),
-                    redirect: 'follow'
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'text/plain' },
+                    body: JSON.stringify(payload)
                 });
 
-                const result = await response.json();
-                if (result.status === 'success') {
-                    alert("Berhasil! Data warga telah tersimpan di Google Sheets.");
-                    closeModalTambah();
-                    document.getElementById("formWarga").reset();
-                    loadData();
-                } else {
-                    alert("Gagal menyimpan: " + result.message);
-                }
+                alert("Data warga berhasil dikirim ke Google Sheets!");
+                closeModalTambah();
+                document.getElementById("formWarga").reset();
+                setTimeout(() => loadData(), 1500);
+
             } catch (err) {
                 console.error(err);
                 alert("Terjadi kesalahan sistem saat mengirim data.");
@@ -413,7 +406,6 @@
             }
         }
 
-        // Filter Tabel Search Box
         function filterTable() {
             const query = document.getElementById("searchInput").value.toLowerCase();
             const filtered = currentDataWarga.filter(row => 
@@ -424,13 +416,8 @@
             renderTable(filtered);
         }
 
-        // Helpers Modal
-        function openModalTambah() {
-            document.getElementById("modalTambah").classList.remove("hidden");
-        }
-        function closeModalTambah() {
-            document.getElementById("modalTambah").classList.add("hidden");
-        }
+        function openModalTambah() { document.getElementById("modalTambah").classList.remove("hidden"); }
+        function closeModalTambah() { document.getElementById("modalTambah").classList.add("hidden"); }
         function formatDate(strDate) {
             if (!strDate) return '-';
             const d = new Date(strDate);
