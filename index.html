@@ -13,7 +13,7 @@
 
     <!-- Header / Navbar -->
     <header class="bg-indigo-700 text-white shadow-lg sticky top-0 z-50">
-        <div class="max-w-7xl mx-mx-auto px-4 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
             <div class="flex items-center gap-3">
                 <div class="bg-white text-indigo-700 p-3 rounded-xl shadow-md">
                     <i class="fa-solid fa-city fa-xl"></i>
@@ -181,7 +181,7 @@
 
     <!-- Modal Form Tambah Warga -->
     <div id="modalTambah" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full overflow-hidden border border-slate-100 animate-fadeIn">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full overflow-hidden border border-slate-100">
             <div class="bg-indigo-700 px-6 py-4 text-white flex justify-between items-center">
                 <h3 class="font-bold text-lg flex items-center gap-2">
                     <i class="fa-solid fa-user-plus"></i> Input Data Warga Baru
@@ -255,12 +255,10 @@
 
     <!-- JavaScript Integration -->
     <script>
-        // URL Apps Script Backend Milikmu yang Sudah Terpasang
         const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwBKl1uU2lN4BYMwVrPGRCkttqkJkbhkiwDAiWSAMsFhH1YwD7XOU4HmBxmqb8Krc_ZbQ/exec";
 
         let currentDataWarga = [];
 
-        // Inisialisasi saat pertama kali web dibuka
         document.addEventListener("DOMContentLoaded", () => {
             loadData();
         });
@@ -284,7 +282,12 @@
             `;
 
             try {
-                const response = await fetch(`${GAS_WEB_APP_URL}?kelurahan=${kelurahan}&rt=${rt}`);
+                // redirect: 'follow' Wajib ditambahkan agar terhindar dari kendala CORS Google Apps Script
+                const response = await fetch(`${GAS_WEB_APP_URL}?kelurahan=${kelurahan}&rt=${rt}`, {
+                    method: 'GET',
+                    redirect: 'follow'
+                });
+                
                 const result = await response.json();
 
                 if (result.status === "success") {
@@ -295,12 +298,12 @@
                     alert("Gagal memuat data: " + result.message);
                 }
             } catch (err) {
-                console.error(err);
+                console.error("CORS / Network Error:", err);
                 tbody.innerHTML = `
                     <tr>
                         <td colspan="8" class="text-center py-8 text-rose-500">
                             <i class="fa-solid fa-triangle-exclamation fa-2xl mb-2"></i>
-                            <p>Gagal terhubung ke Google Sheets. Pastikan koneksi internet lancar.</p>
+                            <p>Gagal terhubung ke Google Sheets. Pastikan izin Deployment di Apps Script sudah diatur ke 'Anyone'.</p>
                         </td>
                     </tr>
                 `;
@@ -381,9 +384,15 @@
             };
 
             try {
+                // Mengirim payload sebagai text/plain dengan mode cors dan redirect follow
                 const response = await fetch(GAS_WEB_APP_URL, {
                     method: 'POST',
-                    body: JSON.stringify(payload)
+                    mode: 'cors',
+                    headers: {
+                        'Content-Type': 'text/plain;charset=utf-8',
+                    },
+                    body: JSON.stringify(payload),
+                    redirect: 'follow'
                 });
 
                 const result = await response.json();
@@ -404,7 +413,7 @@
             }
         }
 
-        // Filter Tabel
+        // Filter Tabel Search Box
         function filterTable() {
             const query = document.getElementById("searchInput").value.toLowerCase();
             const filtered = currentDataWarga.filter(row => 
