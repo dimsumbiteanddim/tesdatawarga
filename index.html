@@ -9,7 +9,7 @@
 </head>
 <body class="bg-slate-100 text-slate-800 font-sans min-h-screen flex flex-col">
 
-    <!-- Header -->
+    <!-- Header / Navbar -->
     <header class="bg-indigo-700 text-white shadow-lg sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
             <div class="flex items-center gap-3">
@@ -65,7 +65,7 @@
             </button>
         </div>
 
-        <!-- Widgets -->
+        <!-- Dashboard Widgets -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
                 <div>
@@ -211,6 +211,7 @@
         </div>
     </div>
 
+    <!-- Integration Script -->
     <script>
         const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwBKl1uU2lN4BYMwVrPGRCkttqkJkbhkiwDAiWSAMsFhH1YwD7XOU4HmBxmqb8Krc_ZbQ/exec";
 
@@ -218,7 +219,7 @@
 
         document.addEventListener("DOMContentLoaded", () => { loadData(); });
 
-        async function loadData() {
+        function loadData() {
             const kelurahanSelect = document.getElementById("selectKelurahan");
             const kelurahan = kelurahanSelect.value;
             let rtRaw = document.getElementById("selectRT").value.trim().toUpperCase() || "RT_001";
@@ -241,19 +242,16 @@
                 </tr>
             `;
 
-            try {
-                const response = await fetch(`${GAS_WEB_APP_URL}?kelurahan=${kelurahan}&rt=${rtRaw}`);
-                const result = await response.json();
+            // Bersihkan tag script JSONP lama jika ada
+            const oldScript = document.getElementById("jsonp_script");
+            if (oldScript) oldScript.remove();
 
-                if (result.status === "success") {
-                    currentDataWarga = result.data || [];
-                    renderTable(currentDataWarga);
-                    updateStats(currentDataWarga);
-                } else {
-                    throw new Error(result.message);
-                }
-            } catch (err) {
-                console.error(err);
+            // Panggil backend via Tag Script JSONP (Aman dari Eror CORS / 400)
+            const script = document.createElement("script");
+            script.id = "jsonp_script";
+            script.src = `${GAS_WEB_APP_URL}?kelurahan=${kelurahan}&rt=${rtRaw}&callback=handleJSONPResponse`;
+            
+            script.onerror = function() {
                 tbody.innerHTML = `
                     <tr>
                         <td colspan="8" class="text-center py-8 text-rose-500">
@@ -262,8 +260,21 @@
                         </td>
                     </tr>
                 `;
-            }
+            };
+
+            document.body.appendChild(script);
         }
+
+        // Callback Global JSONP
+        window.handleJSONPResponse = function(result) {
+            if (result.status === "success") {
+                currentDataWarga = result.data || [];
+                renderTable(currentDataWarga);
+                updateStats(currentDataWarga);
+            } else {
+                alert("Gagal memuat data: " + result.message);
+            }
+        };
 
         function renderTable(data) {
             const tbody = document.getElementById("tableBodyWarga");
