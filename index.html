@@ -211,7 +211,7 @@
         </div>
     </div>
 
-    <!-- Integration Script -->
+    <!-- Script Integration -->
     <script>
         const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwBKl1uU2lN4BYMwVrPGRCkttqkJkbhkiwDAiWSAMsFhH1YwD7XOU4HmBxmqb8Krc_ZbQ/exec";
 
@@ -242,11 +242,11 @@
                 </tr>
             `;
 
-            // Bersihkan tag script JSONP lama jika ada
+            // Hapus tag script JSONP lama jika ada
             const oldScript = document.getElementById("jsonp_script");
             if (oldScript) oldScript.remove();
 
-            // Panggil backend via Tag Script JSONP (Aman dari Eror CORS / 400)
+            // Panggil backend via Tag Script JSONP
             const script = document.createElement("script");
             script.id = "jsonp_script";
             script.src = `${GAS_WEB_APP_URL}?kelurahan=${kelurahan}&rt=${rtRaw}&callback=handleJSONPResponse`;
