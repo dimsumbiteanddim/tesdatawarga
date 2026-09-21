@@ -520,60 +520,66 @@
     }
 
     // INISIALISASI USER & UI
-    function initLoggedInApp() {
-      document.getElementById('app-container').classList.remove('hidden');
+function initLoggedInApp() {
+  document.getElementById('app-container').classList.remove('hidden');
 
-      const user = state.currentUser;
-      document.getElementById('user-display-name').innerText = user.username;
-      document.getElementById('user-display-role').innerText = `Role: ${user.role}`;
-      document.getElementById('user-avatar').innerText = user.username.charAt(0).toUpperCase();
+  const user = state.currentUser;
+  document.getElementById('user-display-name').innerText = user.username;
+  document.getElementById('user-display-role').innerText = `Role: ${user.role}`;
+  document.getElementById('user-avatar').innerText = user.username.charAt(0).toUpperCase();
 
-      const scopeBadge = document.getElementById('user-scope-badge');
-      const navGas = document.getElementById('nav-gas-code');
+  const scopeBadge = document.getElementById('user-scope-badge');
+  const navGas = document.getElementById('nav-gas-code');
 
-      if (user.role === 'admin') {
-        scopeBadge.innerText = "Wilayah: Semua Kota";
-        if (navGas) navGas.classList.remove('hidden');
-      } else if (user.role === 'kecamatan') {
-        scopeBadge.innerText = `Kecamatan: ${user.kecamatan}`;
-        if (navGas) navGas.classList.add('hidden');
-        lockWilayahOptions(user.kecamatan, null);
-      } else if (user.role === 'kelurahan') {
-        scopeBadge.innerText = `Kelurahan: ${user.kelurahan}`;
-        if (navGas) navGas.classList.add('hidden');
-        lockWilayahOptions(user.kecamatan, user.kelurahan);
-      }
+  // Reset/Aktifkan dulu semua dropdown pilihan
+  const kecInp = document.getElementById('inp-kecamatan');
+  const kelInp = document.getElementById('inp-kelurahan');
+  if (kecInp) kecInp.disabled = false;
+  if (kelInp) kelInp.disabled = false;
 
-      document.getElementById('inp-gas-url-setting').value = state.gasUrl;
-      fetchLatestDataFromSheet();
+  if (user.role === 'admin') {
+    scopeBadge.innerText = "Wilayah: Semua Kota";
+    if (navGas) navGas.classList.remove('hidden');
+  } else if (user.role === 'kecamatan') {
+    scopeBadge.innerText = `Kecamatan: ${user.kecamatan}`;
+    if (navGas) navGas.classList.add('hidden');
+    lockWilayahOptions(user.kecamatan, null);
+  } else if (user.role === 'kelurahan') {
+    scopeBadge.innerText = `Kelurahan: ${user.kelurahan}`;
+    if (navGas) navGas.classList.add('hidden');
+    lockWilayahOptions(user.kecamatan, user.kelurahan);
+  }
 
-      if (user.role === 'kelurahan') {
-        switchTab('form-input');
-      } else {
-        switchTab('dashboard');
-      }
-    }
+  document.getElementById('inp-gas-url-setting').value = state.gasUrl;
+  fetchLatestDataFromSheet();
 
-    function lockWilayahOptions(kec, kel) {
-      const kecInp = document.getElementById('inp-kecamatan');
-      const kelInp = document.getElementById('inp-kelurahan');
-      const fKecKK = document.getElementById('filter-kk-kecamatan');
-      const fKecWarga = document.getElementById('filter-warga-kecamatan');
+  if (user.role === 'kelurahan') {
+    switchTab('form-input');
+  } else {
+    switchTab('dashboard');
+  }
+}
 
-      if (kec) {
-        kecInp.value = kec;
-        kecInp.disabled = true;
-        updateKelurahanOptions();
+function lockWilayahOptions(kec, kel) {
+  const kecInp = document.getElementById('inp-kecamatan');
+  const kelInp = document.getElementById('inp-kelurahan');
+  const fKecKK = document.getElementById('filter-kk-kecamatan');
+  const fKecWarga = document.getElementById('filter-warga-kecamatan');
 
-        if (fKecKK) { fKecKK.value = kec; fKecKK.disabled = true; }
-        if (fKecWarga) { fKecWarga.value = kec; fKecWarga.disabled = true; }
-      }
+  if (kec) {
+    kecInp.value = kec;
+    kecInp.disabled = true; // Hanya kunci untuk non-admin
+    updateKelurahanOptions();
 
-      if (kel) {
-        kelInp.value = kel;
-        kelInp.disabled = true;
-      }
-    }
+    if (fKecKK) { fKecKK.value = kec; fKecKK.disabled = true; }
+    if (fKecWarga) { fKecWarga.value = kec; fKecWarga.disabled = true; }
+  }
+
+  if (kel) {
+    kelInp.value = kel;
+    kelInp.disabled = true; // Hanya kunci untuk non-admin
+  }
+}
 
     function updateKelurahanOptions() {
       const kec = document.getElementById('inp-kecamatan').value;
