@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SIP-WARGA Banjarmasin - Login & Pendataan Multi-Level</title>
+  <title>SIP-WARGA Kota Banjarmasin</title>
 
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -47,7 +47,7 @@
 
       <form onsubmit="handleLogin(event)" class="space-y-4">
         <div>
-          <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">Username</label>
+          <label for="login-username" class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">Username</label>
           <div class="relative">
             <i class="fa-solid fa-user absolute left-3.5 top-3 text-gray-400 text-sm"></i>
             <input type="text" id="login-username" required placeholder="Masukkan Username" class="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-bjm-500">
@@ -55,7 +55,7 @@
         </div>
 
         <div>
-          <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">Password</label>
+          <label for="login-password" class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">Password</label>
           <div class="relative">
             <i class="fa-solid fa-lock absolute left-3.5 top-3 text-gray-400 text-sm"></i>
             <input type="password" id="login-password" required placeholder="Masukkan Password" class="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-bjm-500">
@@ -74,7 +74,7 @@
   </div>
 
   <!-- ========================================================================= -->
-  <!-- MAIN APPLICATION LAYOUT (ACTIVE AFTER LOGIN) -->
+  <!-- MAIN APPLICATION LAYOUT -->
   <!-- ========================================================================= -->
   <div id="app-container" class="hidden min-h-screen flex flex-col md:flex-row">
 
@@ -146,9 +146,15 @@
     <main class="flex-1 flex flex-col min-w-0 overflow-y-auto">
       <header class="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between shadow-sm">
         <h2 id="page-title" class="text-xl font-bold text-gray-800">Dashboard Ringkasan</h2>
-        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-bjm-100 text-bjm-800">
-          <i class="fa-solid fa-location-dot me-1.5"></i> Banjarmasin Kayuh Baimbai
-        </span>
+        <div class="flex items-center space-x-2">
+          <button onclick="fetchLatestDataFromSheet()" title="Sinkronkan Data Google Sheets" class="px-3 py-1 bg-bjm-50 hover:bg-bjm-100 text-bjm-800 text-xs font-semibold rounded-lg border border-bjm-200 flex items-center space-x-1.5 transition">
+            <i class="fa-solid fa-arrows-rotate text-bjm-600" id="sync-icon"></i>
+            <span>Sinkron Data</span>
+          </button>
+          <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-bjm-100 text-bjm-800">
+            <i class="fa-solid fa-location-dot me-1.5"></i> Banjarmasin Kayuh Baimbai
+          </span>
+        </div>
       </header>
 
       <div class="p-6 space-y-6 flex-1">
@@ -224,7 +230,7 @@
                 <h4 class="text-xs font-bold uppercase text-bjm-800 mb-4"><i class="fa-solid fa-map-pin me-2"></i> 1. Data Wilayah Domisili</h4>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div>
-                    <label class="block text-xs font-semibold mb-1">Kecamatan *</label>
+                    <label for="inp-kecamatan" class="block text-xs font-semibold mb-1">Kecamatan *</label>
                     <select id="inp-kecamatan" onchange="updateKelurahanOptions()" required class="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-bjm-500">
                       <option value="">-- Pilih Kecamatan --</option>
                       <option value="Banjarmasin Barat">Banjarmasin Barat</option>
@@ -236,15 +242,15 @@
                   </div>
 
                   <div>
-                    <label class="block text-xs font-semibold mb-1">Kelurahan *</label>
+                    <label for="inp-kelurahan" class="block text-xs font-semibold mb-1">Kelurahan *</label>
                     <select id="inp-kelurahan" required class="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-bjm-500">
                       <option value="">-- Pilih Kecamatan Dahulu --</option>
                     </select>
                   </div>
 
                   <div>
-                    <label class="block text-xs font-semibold mb-1">Nomor RT *</label>
-                    <input type="text" id="inp-rt" placeholder="Contoh: RT 012" required class="w-full border rounded-lg px-3 py-2 text-sm">
+                    <label for="inp-rt" class="block text-xs font-semibold mb-1">Nomor RT *</label>
+                    <input type="text" id="inp-rt" placeholder="Contoh: 012" required class="w-full border rounded-lg px-3 py-2 text-sm">
                   </div>
                 </div>
               </div>
@@ -254,11 +260,11 @@
                 <h4 class="text-xs font-bold uppercase text-bjm-800 mb-4"><i class="fa-solid fa-id-card me-2"></i> 2. Dokumen Kependudukan</h4>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label class="block text-xs font-semibold mb-1">No. Kartu Keluarga (KK) *</label>
+                    <label for="inp-no-kk" class="block text-xs font-semibold mb-1">No. Kartu Keluarga (KK) *</label>
                     <input type="text" id="inp-no-kk" maxlength="16" pattern="[0-9]{16}" placeholder="16 digit KK" required class="w-full border rounded-lg px-3 py-2 text-sm font-mono">
                   </div>
                   <div>
-                    <label class="block text-xs font-semibold mb-1">NIK / No. KTP *</label>
+                    <label for="inp-nik" class="block text-xs font-semibold mb-1">NIK / No. KTP *</label>
                     <input type="text" id="inp-nik" maxlength="16" pattern="[0-9]{16}" placeholder="16 digit NIK" required class="w-full border rounded-lg px-3 py-2 text-sm font-mono">
                   </div>
                 </div>
@@ -269,11 +275,11 @@
                 <h4 class="text-xs font-bold uppercase text-bjm-800 mb-4"><i class="fa-solid fa-user me-2"></i> 3. Biodata Warga</h4>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div class="md:col-span-2">
-                    <label class="block text-xs font-semibold mb-1">Nama Lengkap *</label>
+                    <label for="inp-nama-lengkap" class="block text-xs font-semibold mb-1">Nama Lengkap *</label>
                     <input type="text" id="inp-nama-lengkap" required class="w-full border rounded-lg px-3 py-2 text-sm">
                   </div>
                   <div>
-                    <label class="block text-xs font-semibold mb-1">Status Keluarga *</label>
+                    <label for="inp-status-keluarga" class="block text-xs font-semibold mb-1">Status Keluarga *</label>
                     <select id="inp-status-keluarga" required class="w-full border rounded-lg px-3 py-2 text-sm">
                       <option value="">-- Pilih Status --</option>
                       <option value="Kepala Keluarga">Kepala Keluarga</option>
@@ -283,7 +289,7 @@
                     </select>
                   </div>
                   <div>
-                    <label class="block text-xs font-semibold mb-1">Jenis Kelamin *</label>
+                    <label for="inp-gender" class="block text-xs font-semibold mb-1">Jenis Kelamin *</label>
                     <select id="inp-gender" required class="w-full border rounded-lg px-3 py-2 text-sm">
                       <option value="">-- Pilih --</option>
                       <option value="Laki-laki">Laki-laki</option>
@@ -291,7 +297,7 @@
                     </select>
                   </div>
                   <div>
-                    <label class="block text-xs font-semibold mb-1">Agama *</label>
+                    <label for="inp-agama" class="block text-xs font-semibold mb-1">Agama *</label>
                     <select id="inp-agama" required class="w-full border rounded-lg px-3 py-2 text-sm">
                       <option value="Islam">Islam</option>
                       <option value="Kristen">Kristen</option>
@@ -302,15 +308,15 @@
                     </select>
                   </div>
                   <div>
-                    <label class="block text-xs font-semibold mb-1">Tanggal Lahir *</label>
+                    <label for="inp-tgl-lahir" class="block text-xs font-semibold mb-1">Tanggal Lahir *</label>
                     <input type="date" id="inp-tgl-lahir" required class="w-full border rounded-lg px-3 py-2 text-sm">
                   </div>
                   <div class="md:col-span-2">
-                    <label class="block text-xs font-semibold mb-1">Alamat Lengkap *</label>
+                    <label for="inp-alamat" class="block text-xs font-semibold mb-1">Alamat Lengkap *</label>
                     <input type="text" id="inp-alamat" required class="w-full border rounded-lg px-3 py-2 text-sm">
                   </div>
                   <div>
-                    <label class="block text-xs font-semibold mb-1">Pekerjaan *</label>
+                    <label for="inp-pekerjaan" class="block text-xs font-semibold mb-1">Pekerjaan *</label>
                     <input type="text" id="inp-pekerjaan" required class="w-full border rounded-lg px-3 py-2 text-sm">
                   </div>
                 </div>
@@ -443,16 +449,7 @@
       e.preventDefault();
       const u = document.getElementById('login-username').value.trim();
       const p = document.getElementById('login-password').value.trim();
-      const alertBox = document.getElementById('login-alert');
       const btn = document.getElementById('btn-login');
-
-      if (!state.gasUrl) {
-        // Fallback pengujian lokal jika GAS URL belum diisi
-        if (u === 'admin' && p === 'admin123') {
-          loginSuccess({ username: 'admin', role: 'admin' });
-          return;
-        }
-      }
 
       btn.disabled = true;
       btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin me-2"></i> Memeriksa...`;
@@ -471,7 +468,7 @@
           showLoginAlert(data.message, 'bg-red-100 text-red-800');
         }
       } catch (err) {
-        showLoginAlert('Gagal terhubung ke server Apps Script. Cek URL GAS Script Anda.', 'bg-yellow-100 text-yellow-800');
+        showLoginAlert('Gagal terhubung ke Apps Script. Pastikan URL Web App sudah benar.', 'bg-yellow-100 text-yellow-800');
       } finally {
         btn.disabled = false;
         btn.innerHTML = `<i class="fa-solid fa-right-to-bracket me-2"></i> Masuk ke Aplikasi`;
@@ -497,7 +494,32 @@
       b.classList.remove('hidden');
     }
 
-    // INTERFACE DENGAN PERAN MULTI-LEVEL (RBAC)
+    // TARIK DATA DARI GOOGLE SHEETS DENGAN SINKRONISASI
+    async function fetchLatestDataFromSheet() {
+      if (!state.gasUrl) return;
+
+      const syncIcon = document.getElementById('sync-icon');
+      if (syncIcon) syncIcon.classList.add('fa-spin');
+
+      try {
+        const res = await fetch(state.gasUrl);
+        const result = await res.json();
+
+        if (result.status === 'success') {
+          state.dataWarga = result.data || [];
+          rebuildDataKK();
+          renderDashboard();
+          renderDataKK();
+          renderDataWarga();
+        }
+      } catch (err) {
+        console.error("Gagal sinkron data:", err);
+      } finally {
+        if (syncIcon) syncIcon.classList.remove('fa-spin');
+      }
+    }
+
+    // INISIALISASI USER & UI
     function initLoggedInApp() {
       document.getElementById('app-container').classList.remove('hidden');
 
@@ -509,7 +531,6 @@
       const scopeBadge = document.getElementById('user-scope-badge');
       const navGas = document.getElementById('nav-gas-code');
 
-      // Terapkan batasan wilayah berdasarkan role
       if (user.role === 'admin') {
         scopeBadge.innerText = "Wilayah: Semua Kota";
         if (navGas) navGas.classList.remove('hidden');
@@ -524,11 +545,8 @@
       }
 
       document.getElementById('inp-gas-url-setting').value = state.gasUrl;
-      renderDashboard();
-      renderDataKK();
-      renderDataWarga();
+      fetchLatestDataFromSheet();
 
-      // Kelurahan langsung buka Form Input
       if (user.role === 'kelurahan') {
         switchTab('form-input');
       } else {
@@ -572,41 +590,33 @@
       }
     }
 
-   function switchTab(tabId) {
-  const tabs = ['dashboard', 'form-input', 'data-kk', 'data-warga', 'gas-code'];
-  
-  // Mapping judul halaman berdasarkan tab yang dipilih
-  const titles = {
-    'dashboard': 'Dashboard Ringkasan',
-    'form-input': 'Form Input Data Warga',
-    'data-kk': 'Data KK (Kartu Keluarga)',
-    'data-warga': 'Data Warga (Individu)',
-    'gas-code': 'Integrasi Apps Script'
-  };
+    function switchTab(tabId) {
+      const tabs = ['dashboard', 'form-input', 'data-kk', 'data-warga', 'gas-code'];
+      const titles = {
+        'dashboard': 'Dashboard Ringkasan',
+        'form-input': 'Form Input Data Warga',
+        'data-kk': 'Data KK (Kartu Keluarga)',
+        'data-warga': 'Data Warga (Individu)',
+        'gas-code': 'Integrasi Apps Script'
+      };
 
-  // Sembunyikan semua section dan atur style tombol nav
-  tabs.forEach(id => {
-    const sec = document.getElementById(`section-${id}`);
-    const nav = document.getElementById(`nav-${id}`);
-    if (sec) sec.classList.add('hidden');
-    if (nav) nav.classList.remove('bg-bjm-800', 'text-white');
-  });
+      tabs.forEach(id => {
+        const sec = document.getElementById(`section-${id}`);
+        const nav = document.getElementById(`nav-${id}`);
+        if (sec) sec.classList.add('hidden');
+        if (nav) nav.classList.remove('bg-bjm-800', 'text-white');
+      });
 
-  // Tampilkan section yang dipilih
-  const activeSec = document.getElementById(`section-${tabId}`);
-  const activeNav = document.getElementById(`nav-${tabId}`);
-  
-  if (activeSec) activeSec.classList.remove('hidden');
-  if (activeNav) activeNav.classList.add('bg-bjm-800', 'text-white');
+      const activeSec = document.getElementById(`section-${tabId}`);
+      const activeNav = document.getElementById(`nav-${tabId}`);
+      if (activeSec) activeSec.classList.remove('hidden');
+      if (activeNav) activeNav.classList.add('bg-bjm-800', 'text-white');
 
-  // UPDATE JUDUL HEADER
-  const pageTitle = document.getElementById('page-title');
-  if (pageTitle && titles[tabId]) {
-    pageTitle.innerText = titles[tabId];
-  }
-}
+      const pageTitle = document.getElementById('page-title');
+      if (pageTitle && titles[tabId]) pageTitle.innerText = titles[tabId];
+    }
 
-    // PENYARINGAN DATA BERDASARKAN HAK AKSES USER
+    // FILTER HAK AKSES PERAN
     function getFilteredWargaByRole() {
       const u = state.currentUser;
       if (!u || u.role === 'admin') return state.dataWarga;
@@ -703,6 +713,7 @@
       e.preventDefault();
       const btn = document.getElementById('btn-submit-form');
       btn.disabled = true;
+      btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin me-2"></i> Memproses...`;
 
       const payload = {
         action: 'simpan_warga',
@@ -734,8 +745,10 @@
       }
 
       alert('Data Warga Berhasil Disimpan!');
+      document.getElementById('warga-form').reset();
       renderDashboard(); renderDataKK(); renderDataWarga();
       btn.disabled = false;
+      btn.innerHTML = `<i class="fa-solid fa-paper-plane me-2"></i> Simpan Data Warga`;
     }
 
     function rebuildDataKK() {
