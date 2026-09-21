@@ -389,58 +389,72 @@
             document.getElementById("statGenderRatio").innerText = `${totalLaki} / ${totalPerempuan}`;
         }
 
-        async function submitForm(e) {
-            e.preventDefault();
-            const btn = document.getElementById("btnSubmit");
-            btn.disabled = true;
-            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Menyimpan...`;
+        function submitForm(e) {
+    e.preventDefault();
+    const btn = document.getElementById("btnSubmit");
+    btn.disabled = true;
+    btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Menyimpan...`;
 
-            let rtRaw = document.getElementById("selectRT").value.trim().toUpperCase() || "RT_001";
-            if (!rtRaw.includes("_")) {
-                const num = rtRaw.replace(/[^0-9]/g, '');
-                rtRaw = `RT_${num.padStart(3, '0')}`;
-            }
+    let rtRaw = document.getElementById("selectRT").value.trim().toUpperCase() || "RT_001";
+    if (!rtRaw.includes("_")) {
+        const num = rtRaw.replace(/[^0-9]/g, '');
+        rtRaw = `RT_${num.padStart(3, '0')}`;
+    }
 
-            const kelurahanSelect = document.getElementById("selectKelurahan");
-            const selectedOption = kelurahanSelect.options[kelurahanSelect.selectedIndex];
-            const optGroup = selectedOption.parentNode;
-            const namaKecamatan = optGroup.getAttribute("data-kec") || "Banjarmasin Utara";
+    const kelurahanSelect = document.getElementById("selectKelurahan");
+    const selectedOption = kelurahanSelect.options[kelurahanSelect.selectedIndex];
+    const optGroup = selectedOption.parentNode;
+    const namaKecamatan = optGroup.getAttribute("data-kec") || "Banjarmasin Utara";
 
-            const payload = {
-                kecamatan: namaKecamatan,
-                kelurahan: kelurahanSelect.value,
-                rt: rtRaw,
-                no_kk: document.getElementById("inputNoKK").value.trim(),
-                nik: document.getElementById("inputNIK").value.trim(),
-                nama: document.getElementById("inputNama").value.trim(),
-                gender: document.getElementById("inputGender").value,
-                status_keluarga: document.getElementById("inputStatus").value,
-                tgl_lahir: document.getElementById("inputTglLahir").value,
-                pekerjaan: document.getElementById("inputPekerjaan").value.trim(),
-                alamat: document.getElementById("inputAlamat").value.trim()
-            };
+    const payload = {
+        kecamatan: namaKecamatan,
+        kelurahan: kelurahanSelect.value,
+        rt: rtRaw,
+        no_kk: document.getElementById("inputNoKK").value.trim(),
+        nik: document.getElementById("inputNIK").value.trim(),
+        nama: document.getElementById("inputNama").value.trim(),
+        gender: document.getElementById("inputGender").value,
+        status_keluarga: document.getElementById("inputStatus").value,
+        tgl_lahir: document.getElementById("inputTglLahir").value,
+        pekerjaan: document.getElementById("inputPekerjaan").value.trim(),
+        alamat: document.getElementById("inputAlamat").value.trim()
+    };
 
-            try {
-                await fetch(GAS_WEB_APP_URL, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    headers: { 'Content-Type': 'text/plain' },
-                    body: JSON.stringify(payload)
-                });
+    // Kirim menggunakan form tersembunyi (100% Bypasses CORS Block)
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = GAS_WEB_APP_URL;
+    form.target = 'hidden_iframe';
 
-                alert("Data warga berhasil disimpan ke Database Terpusat!");
-                closeModalTambah();
-                document.getElementById("formWarga").reset();
-                setTimeout(() => loadData(), 1500);
+    const input = document.createElement('input');
+    input.type = 'hidden';
+    input.name = 'postData';
+    input.value = JSON.stringify(payload);
+    form.appendChild(input);
 
-            } catch (err) {
-                console.error(err);
-                alert("Terjadi kesalahan sistem saat menyimpan data.");
-            } finally {
-                btn.disabled = false;
-                btn.innerHTML = `<i class="fa-solid fa-paper-plane"></i> Simpan Ke Database Terpusat`;
-            }
-        }
+    // Buat iframe tersembunyi jika belum ada
+    let iframe = document.getElementById('hidden_iframe');
+    if (!iframe) {
+        iframe = document.createElement('iframe');
+        iframe.id = 'hidden_iframe';
+        iframe.name = 'hidden_iframe';
+        iframe.style.display = 'none';
+        document.body.appendChild(iframe);
+    }
+
+    document.body.appendChild(form);
+    form.submit();
+    document.body.removeChild(form);
+
+    setTimeout(() => {
+        alert("Data warga berhasil dikirim ke Database!");
+        closeModalTambah();
+        document.getElementById("formWarga").reset();
+        btn.disabled = false;
+        btn.innerHTML = `<i class="fa-solid fa-paper-plane"></i> Simpan Ke Database Terpusat`;
+        loadData();
+    }, 2000);
+}
 
         function filterTable() {
             const query = document.getElementById("searchInput").value.toLowerCase();
