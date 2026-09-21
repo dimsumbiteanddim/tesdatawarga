@@ -572,19 +572,39 @@
       }
     }
 
-    function switchTab(tabId) {
-      const tabs = ['dashboard', 'form-input', 'data-kk', 'data-warga', 'gas-code'];
-      tabs.forEach(id => {
-        const sec = document.getElementById(`section-${id}`);
-        const nav = document.getElementById(`nav-${id}`);
-        if (sec) sec.classList.add('hidden');
-        if (nav) nav.classList.remove('bg-bjm-800', 'text-white');
-      });
+   function switchTab(tabId) {
+  const tabs = ['dashboard', 'form-input', 'data-kk', 'data-warga', 'gas-code'];
+  
+  // Mapping judul halaman berdasarkan tab yang dipilih
+  const titles = {
+    'dashboard': 'Dashboard Ringkasan',
+    'form-input': 'Form Input Data Warga',
+    'data-kk': 'Data KK (Kartu Keluarga)',
+    'data-warga': 'Data Warga (Individu)',
+    'gas-code': 'Integrasi Apps Script'
+  };
 
-      document.getElementById(`section-${tabId}`).classList.remove('hidden');
-      const activeNav = document.getElementById(`nav-${tabId}`);
-      if (activeNav) activeNav.classList.add('bg-bjm-800', 'text-white');
-    }
+  // Sembunyikan semua section dan atur style tombol nav
+  tabs.forEach(id => {
+    const sec = document.getElementById(`section-${id}`);
+    const nav = document.getElementById(`nav-${id}`);
+    if (sec) sec.classList.add('hidden');
+    if (nav) nav.classList.remove('bg-bjm-800', 'text-white');
+  });
+
+  // Tampilkan section yang dipilih
+  const activeSec = document.getElementById(`section-${tabId}`);
+  const activeNav = document.getElementById(`nav-${tabId}`);
+  
+  if (activeSec) activeSec.classList.remove('hidden');
+  if (activeNav) activeNav.classList.add('bg-bjm-800', 'text-white');
+
+  // UPDATE JUDUL HEADER
+  const pageTitle = document.getElementById('page-title');
+  if (pageTitle && titles[tabId]) {
+    pageTitle.innerText = titles[tabId];
+  }
+}
 
     // PENYARINGAN DATA BERDASARKAN HAK AKSES USER
     function getFilteredWargaByRole() {
