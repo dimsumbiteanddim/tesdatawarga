@@ -9,7 +9,7 @@
 </head>
 <body class="bg-slate-100 text-slate-800 font-sans min-h-screen flex flex-col">
 
-    <!-- Header / Navbar -->
+    <!-- Header -->
     <header class="bg-indigo-700 text-white shadow-lg sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
             <div class="flex items-center gap-3">
@@ -22,7 +22,6 @@
                 </div>
             </div>
             
-            <!-- Global Kelurahan & RT Selection -->
             <div class="flex flex-wrap gap-2 w-full md:w-auto">
                 <select id="selectKelurahan" onchange="loadData()" class="bg-indigo-800 text-white text-sm rounded-lg px-3 py-2 border border-indigo-500 focus:outline-none">
                     <optgroup label="Banjarmasin Utara" data-kec="Banjarmasin Utara">
@@ -31,57 +30,9 @@
                         <option value="kel_alalak_utara">Kel. Alalak Utara</option>
                         <option value="kel_sungai_miai">Kel. Sungai Miai</option>
                         <option value="kel_pangeran">Kel. Pangeran</option>
-                        <option value="kel_sungai_andai">Kel. Sungai Andai</option>
-                        <option value="kel_surgi_mufti">Kel. Surgi Mufti</option>
-                        <option value="kel_antasan_kecil_timur">Kel. Antasan Kecil Timur</option>
-                        <option value="kel_kuin_utara">Kel. Kuin Utara</option>
-                    </optgroup>
-                    <optgroup label="Banjarmasin Barat" data-kec="Banjarmasin Barat">
-                        <option value="kel_pelambuan">Kel. Pelambuan</option>
-                        <option value="kel_telaga_biru">Kel. Telaga Biru</option>
-                        <option value="kel_belitung_selatan">Kel. Belitung Selatan</option>
-                        <option value="kel_belitung_utara">Kel. Belitung Utara</option>
-                        <option value="kel_kuin_selatan">Kel. Kuin Selatan</option>
-                        <option value="kel_kuin_cerucuk">Kel. Kuin Cerucuk</option>
-                        <option value="kel_basirih">Kel. Basirih</option>
-                        <option value="kel_teluk_tiram">Kel. Teluk Tiram</option>
-                    </optgroup>
-                    <optgroup label="Banjarmasin Tengah" data-kec="Banjarmasin Tengah">
-                        <option value="kel_kertak_baru_ilir">Kel. Kertak Baru Ilir</option>
-                        <option value="kel_kertak_baru_ulu">Kel. Kertak Baru Ulu</option>
-                        <option value="kel_mawar">Kel. Mawar</option>
-                        <option value="kel_pasar_lama">Kel. Pasar Lama</option>
-                        <option value="kel_seberang_mesjid">Kel. Seberang Mesjid</option>
-                        <option value="kel_melayu">Kel. Melayu</option>
-                        <option value="kel_gadang">Kel. Gadang</option>
-                        <option value="kel_pekapuran_laut">Kel. Pekapuran Laut</option>
-                        <option value="kel_kelayan_luar">Kel. Kelayan Luar</option>
-                        <option value="kel_teluk_dalam">Kel. Teluk Dalam</option>
-                        <option value="kel_antasan_besar">Kel. Antasan Besar</option>
-                    </optgroup>
-                    <optgroup label="Banjarmasin Selatan" data-kec="Banjarmasin Selatan">
-                        <option value="kel_kelayan_barat">Kel. Kelayan Barat</option>
-                        <option value="kel_kelayan_timur">Kel. Kelayan Timur</option>
-                        <option value="kel_kelayan_tengah">Kel. Kelayan Tengah</option>
-                        <option value="kel_kelayan_dalam">Kel. Kelayan Dalam</option>
-                        <option value="kel_pemurus_dalam">Kel. Pemurus Dalam</option>
-                        <option value="kel_pemurus_baru">Kel. Pemurus Baru</option>
-                        <option value="kel_murung_raya">Kel. Murung Raya</option>
-                        <option value="kel_tanjung_pambandangan">Kel. Tanjung Pambandangan</option>
-                        <option value="kel_mantuil">Kel. Mantuil</option>
-                        <option value="kel_basirih_selatan">Kel. Basirih Selatan</option>
-                        <option value="kel_pekauman">Kel. Pekauman</option>
                     </optgroup>
                     <optgroup label="Banjarmasin Timur" data-kec="Banjarmasin Timur">
-                        <option value="kel_kuripan">Kel. Kuripan</option>
-                        <option value="kel_kebun_bunga">Kel. Kebun Bunga</option>
-                        <option value="kel_pengambangan">Kel. Pengambangan</option>
-                        <option value="kel_banua_anyar">Kel. Banua Anyar</option>
-                        <option value="kel_sungai_bilu">Kel. Sungai Bilu</option>
-                        <option value="kel_pekapuran_raya">Kel. Pekapuran Raya</option>
                         <option value="kel_karang_mekar">Kel. Karang Mekar</option>
-                        <option value="kel_pemurus_luar">Kel. Pemurus Luar</option>
-                        <option value="kel_sungai_lulut">Kel. Sungai Lulut</option>
                     </optgroup>
                 </select>
 
@@ -114,54 +65,39 @@
             </button>
         </div>
 
-        <!-- Dashboard Widgets -->
+        <!-- Widgets -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
                 <div>
                     <p class="text-xs font-bold text-slate-400 uppercase">Total Warga</p>
                     <h3 id="statTotalWarga" class="text-2xl font-extrabold text-slate-800 mt-1">0</h3>
-                    <p class="text-xs text-slate-500 mt-0.5">Jiwa Terdata</p>
                 </div>
-                <div class="bg-blue-100 text-blue-600 p-3.5 rounded-xl">
-                    <i class="fa-solid fa-users fa-xl"></i>
-                </div>
+                <div class="bg-blue-100 text-blue-600 p-3.5 rounded-xl"><i class="fa-solid fa-users fa-xl"></i></div>
             </div>
-
             <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
                 <div>
                     <p class="text-xs font-bold text-slate-400 uppercase">Total KK</p>
                     <h3 id="statTotalKK" class="text-2xl font-extrabold text-slate-800 mt-1">0</h3>
-                    <p class="text-xs text-slate-500 mt-0.5">Kartu Keluarga</p>
                 </div>
-                <div class="bg-emerald-100 text-emerald-600 p-3.5 rounded-xl">
-                    <i class="fa-solid fa-address-card fa-xl"></i>
-                </div>
+                <div class="bg-emerald-100 text-emerald-600 p-3.5 rounded-xl"><i class="fa-solid fa-address-card fa-xl"></i></div>
             </div>
-
             <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
                 <div>
                     <p class="text-xs font-bold text-slate-400 uppercase">Rata-rata Anggota</p>
                     <h3 id="statAvgAnggota" class="text-2xl font-extrabold text-slate-800 mt-1">0</h3>
-                    <p class="text-xs text-slate-500 mt-0.5">Orang / KK</p>
                 </div>
-                <div class="bg-amber-100 text-amber-600 p-3.5 rounded-xl">
-                    <i class="fa-solid fa-chart-pie fa-xl"></i>
-                </div>
+                <div class="bg-amber-100 text-amber-600 p-3.5 rounded-xl"><i class="fa-solid fa-chart-pie fa-xl"></i></div>
             </div>
-
             <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
                 <div>
                     <p class="text-xs font-bold text-slate-400 uppercase">Laki / Perempuan</p>
                     <h3 id="statGenderRatio" class="text-xl font-extrabold text-slate-800 mt-1">0 / 0</h3>
-                    <p class="text-xs text-slate-500 mt-0.5">Komposisi Gender</p>
                 </div>
-                <div class="bg-purple-100 text-purple-600 p-3.5 rounded-xl">
-                    <i class="fa-solid fa-venus-mars fa-xl"></i>
-                </div>
+                <div class="bg-purple-100 text-purple-600 p-3.5 rounded-xl"><i class="fa-solid fa-venus-mars fa-xl"></i></div>
             </div>
         </div>
 
-        <!-- Tabel Data Warga -->
+        <!-- Tabel Data -->
         <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
             <div class="p-4 bg-slate-50 border-b border-slate-200 flex flex-col md:flex-row justify-between items-center gap-4">
                 <div class="flex items-center gap-2">
@@ -192,7 +128,7 @@
                         <tr>
                             <td colspan="8" class="text-center py-8 text-slate-400">
                                 <i class="fa-solid fa-spinner fa-spin fa-2xl mb-2 text-indigo-500"></i>
-                                <p>Memuat data warga dari Database Terpusat...</p>
+                                <p>Memuat data warga...</p>
                             </td>
                         </tr>
                     </tbody>
@@ -217,30 +153,30 @@
                 <div class="grid grid-cols-2 gap-3">
                     <div>
                         <label class="block text-xs font-bold text-slate-600 uppercase mb-1">No. Kartu Keluarga (KK)</label>
-                        <input type="text" id="inputNoKK" required maxlength="16" placeholder="16 Digit No KK" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                        <input type="text" id="inputNoKK" required maxlength="16" placeholder="16 Digit No KK" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none">
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-slate-600 uppercase mb-1">NIK Warga</label>
-                        <input type="text" id="inputNIK" required maxlength="16" placeholder="16 Digit NIK" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                        <input type="text" id="inputNIK" required maxlength="16" placeholder="16 Digit NIK" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none">
                     </div>
                 </div>
 
                 <div>
                     <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Nama Lengkap</label>
-                    <input type="text" id="inputNama" required placeholder="Sesuai KTP/KK" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                    <input type="text" id="inputNama" required placeholder="Sesuai KTP/KK" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none">
                 </div>
 
                 <div class="grid grid-cols-2 gap-3">
                     <div>
                         <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Jenis Kelamin</label>
-                        <select id="inputGender" required class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                        <select id="inputGender" required class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none">
                             <option value="Laki-laki">Laki-laki</option>
                             <option value="Perempuan">Perempuan</option>
                         </select>
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Status Keluarga</label>
-                        <select id="inputStatus" required class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                        <select id="inputStatus" required class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none">
                             <option value="Kepala Keluarga">Kepala Keluarga</option>
                             <option value="Istri">Istri</option>
                             <option value="Anak">Anak</option>
@@ -252,40 +188,37 @@
                 <div class="grid grid-cols-2 gap-3">
                     <div>
                         <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Tanggal Lahir</label>
-                        <input type="date" id="inputTglLahir" required class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                        <input type="date" id="inputTglLahir" required class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none">
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Pekerjaan</label>
-                        <input type="text" id="inputPekerjaan" placeholder="PNS, Swasta, dll." class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                        <input type="text" id="inputPekerjaan" placeholder="PNS, Swasta, dll." class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none">
                     </div>
                 </div>
 
                 <div>
                     <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Alamat Lengkap</label>
-                    <textarea id="inputAlamat" rows="2" placeholder="Nama Jalan, No. Rumah" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none"></textarea>
+                    <textarea id="inputAlamat" rows="2" placeholder="Nama Jalan, No. Rumah" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none"></textarea>
                 </div>
 
                 <div class="pt-3 flex gap-2 justify-end">
                     <button type="button" onclick="closeModalTambah()" class="px-4 py-2 border border-slate-300 rounded-lg text-sm font-semibold text-slate-600 hover:bg-slate-100 transition">Batal</button>
                     <button type="submit" id="btnSubmit" class="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-sm font-semibold shadow transition flex items-center gap-2">
-                        <i class="fa-solid fa-paper-plane"></i> Simpan Ke Database Terpusat
+                        <i class="fa-solid fa-paper-plane"></i> Simpan Data
                     </button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- Script Integration -->
     <script>
         const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwBKl1uU2lN4BYMwVrPGRCkttqkJkbhkiwDAiWSAMsFhH1YwD7XOU4HmBxmqb8Krc_ZbQ/exec";
 
         let currentDataWarga = [];
 
-        document.addEventListener("DOMContentLoaded", () => {
-            loadData();
-        });
+        document.addEventListener("DOMContentLoaded", () => { loadData(); });
 
-        function loadData() {
+        async function loadData() {
             const kelurahanSelect = document.getElementById("selectKelurahan");
             const kelurahan = kelurahanSelect.value;
             let rtRaw = document.getElementById("selectRT").value.trim().toUpperCase() || "RT_001";
@@ -303,41 +236,34 @@
                 <tr>
                     <td colspan="8" class="text-center py-8 text-slate-400">
                         <i class="fa-solid fa-spinner fa-spin fa-2xl mb-2 text-indigo-500"></i>
-                        <p>Mengambil data dari Database Terpusat...</p>
+                        <p>Mengambil data dari Database...</p>
                     </td>
                 </tr>
             `;
 
-            const oldScript = document.getElementById("jsonp_script");
-            if (oldScript) oldScript.remove();
+            try {
+                const response = await fetch(`${GAS_WEB_APP_URL}?kelurahan=${kelurahan}&rt=${rtRaw}`);
+                const result = await response.json();
 
-            const script = document.createElement("script");
-            script.id = "jsonp_script";
-            script.src = `${GAS_WEB_APP_URL}?kelurahan=${kelurahan}&rt=${rtRaw}&callback=handleJSONPResponse`;
-            
-            script.onerror = function() {
+                if (result.status === "success") {
+                    currentDataWarga = result.data || [];
+                    renderTable(currentDataWarga);
+                    updateStats(currentDataWarga);
+                } else {
+                    throw new Error(result.message);
+                }
+            } catch (err) {
+                console.error(err);
                 tbody.innerHTML = `
                     <tr>
                         <td colspan="8" class="text-center py-8 text-rose-500">
                             <i class="fa-solid fa-triangle-exclamation fa-2xl mb-2"></i>
-                            <p>Gagal memuat data. Silakan coba tekan tombol 'Muat'.</p>
+                            <p>Gagal memuat data. Silakan tekan 'Muat'.</p>
                         </td>
                     </tr>
                 `;
-            };
-
-            document.body.appendChild(script);
-        }
-
-        window.handleJSONPResponse = function(result) {
-            if (result.status === "success") {
-                currentDataWarga = result.data || [];
-                renderTable(currentDataWarga);
-                updateStats(currentDataWarga);
-            } else {
-                alert("Gagal memuat data: " + result.message);
             }
-        };
+        }
 
         function renderTable(data) {
             const tbody = document.getElementById("tableBodyWarga");
@@ -348,7 +274,7 @@
                     <tr>
                         <td colspan="8" class="text-center py-8 text-slate-400">
                             <i class="fa-solid fa-folder-open fa-2xl mb-2"></i>
-                            <p>Belum ada data warga terdaftar di RT ini.</p>
+                            <p>Belum ada data warga terdaftar di wilayah ini.</p>
                         </td>
                     </tr>
                 `;
@@ -390,71 +316,69 @@
         }
 
         function submitForm(e) {
-    e.preventDefault();
-    const btn = document.getElementById("btnSubmit");
-    btn.disabled = true;
-    btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Menyimpan...`;
+            e.preventDefault();
+            const btn = document.getElementById("btnSubmit");
+            btn.disabled = true;
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Menyimpan...`;
 
-    let rtRaw = document.getElementById("selectRT").value.trim().toUpperCase() || "RT_001";
-    if (!rtRaw.includes("_")) {
-        const num = rtRaw.replace(/[^0-9]/g, '');
-        rtRaw = `RT_${num.padStart(3, '0')}`;
-    }
+            let rtRaw = document.getElementById("selectRT").value.trim().toUpperCase() || "RT_001";
+            if (!rtRaw.includes("_")) {
+                const num = rtRaw.replace(/[^0-9]/g, '');
+                rtRaw = `RT_${num.padStart(3, '0')}`;
+            }
 
-    const kelurahanSelect = document.getElementById("selectKelurahan");
-    const selectedOption = kelurahanSelect.options[kelurahanSelect.selectedIndex];
-    const optGroup = selectedOption.parentNode;
-    const namaKecamatan = optGroup.getAttribute("data-kec") || "Banjarmasin Utara";
+            const kelurahanSelect = document.getElementById("selectKelurahan");
+            const selectedOption = kelurahanSelect.options[kelurahanSelect.selectedIndex];
+            const optGroup = selectedOption.parentNode;
+            const namaKecamatan = optGroup.getAttribute("data-kec") || "Banjarmasin Utara";
 
-    const payload = {
-        kecamatan: namaKecamatan,
-        kelurahan: kelurahanSelect.value,
-        rt: rtRaw,
-        no_kk: document.getElementById("inputNoKK").value.trim(),
-        nik: document.getElementById("inputNIK").value.trim(),
-        nama: document.getElementById("inputNama").value.trim(),
-        gender: document.getElementById("inputGender").value,
-        status_keluarga: document.getElementById("inputStatus").value,
-        tgl_lahir: document.getElementById("inputTglLahir").value,
-        pekerjaan: document.getElementById("inputPekerjaan").value.trim(),
-        alamat: document.getElementById("inputAlamat").value.trim()
-    };
+            const payload = {
+                kecamatan: namaKecamatan,
+                kelurahan: kelurahanSelect.value,
+                rt: rtRaw,
+                no_kk: document.getElementById("inputNoKK").value.trim(),
+                nik: document.getElementById("inputNIK").value.trim(),
+                nama: document.getElementById("inputNama").value.trim(),
+                gender: document.getElementById("inputGender").value,
+                status_keluarga: document.getElementById("inputStatus").value,
+                tgl_lahir: document.getElementById("inputTglLahir").value,
+                pekerjaan: document.getElementById("inputPekerjaan").value.trim(),
+                alamat: document.getElementById("inputAlamat").value.trim()
+            };
 
-    // Kirim menggunakan form tersembunyi (100% Bypasses CORS Block)
-    const form = document.createElement('form');
-    form.method = 'POST';
-    form.action = GAS_WEB_APP_URL;
-    form.target = 'hidden_iframe';
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = GAS_WEB_APP_URL;
+            form.target = 'hidden_iframe';
 
-    const input = document.createElement('input');
-    input.type = 'hidden';
-    input.name = 'postData';
-    input.value = JSON.stringify(payload);
-    form.appendChild(input);
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'postData';
+            input.value = JSON.stringify(payload);
+            form.appendChild(input);
 
-    // Buat iframe tersembunyi jika belum ada
-    let iframe = document.getElementById('hidden_iframe');
-    if (!iframe) {
-        iframe = document.createElement('iframe');
-        iframe.id = 'hidden_iframe';
-        iframe.name = 'hidden_iframe';
-        iframe.style.display = 'none';
-        document.body.appendChild(iframe);
-    }
+            let iframe = document.getElementById('hidden_iframe');
+            if (!iframe) {
+                iframe = document.createElement('iframe');
+                iframe.id = 'hidden_iframe';
+                iframe.name = 'hidden_iframe';
+                iframe.style.display = 'none';
+                document.body.appendChild(iframe);
+            }
 
-    document.body.appendChild(form);
-    form.submit();
-    document.body.removeChild(form);
+            document.body.appendChild(form);
+            form.submit();
+            document.body.removeChild(form);
 
-    setTimeout(() => {
-        alert("Data warga berhasil dikirim ke Database!");
-        closeModalTambah();
-        document.getElementById("formWarga").reset();
-        btn.disabled = false;
-        btn.innerHTML = `<i class="fa-solid fa-paper-plane"></i> Simpan Ke Database Terpusat`;
-        loadData();
-    }, 2000);
-}
+            setTimeout(() => {
+                alert("Data warga berhasil disimpan!");
+                closeModalTambah();
+                document.getElementById("formWarga").reset();
+                btn.disabled = false;
+                btn.innerHTML = `<i class="fa-solid fa-paper-plane"></i> Simpan Data`;
+                loadData();
+            }, 2000);
+        }
 
         function filterTable() {
             const query = document.getElementById("searchInput").value.toLowerCase();
